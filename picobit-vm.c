@@ -368,7 +368,7 @@ int main (int argc, char *argv[])
 interpreter();
 #endif
 
-#ifdef HI_TECH_C
+#if defined(HI_TECH_C) || defined (ARDUINO) 
 void main () {
   interpreter();
 }

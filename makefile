@@ -7,10 +7,10 @@ all: picobit-vm
 
 # TODO separate compilation does not work for the moment, see picobit-vm.c for details
 picobit-vm: picobit-vm.c gc.c bignums.c debug.c primitives.c dispatch.c picobit-vm.h
-	cc -o picobit-vm picobit-vm.c
+	cc -Iarch -o picobit-vm picobit-vm.c
 
 .c.o:
-	$(CC) -O -c $*.c
+	$(CC) -Iarch -O -c $*.c
 
 # TODO instead, maybe have these targets change a variable (CFLAGS ?) and call the all target ?
 debug:
@@ -37,6 +37,9 @@ mcc18: picoboard2.c picobit-vm.c gc.c bignums.c debug.c primitives.c dispatch.c 
 
 hi_tech_c: picobit-vm.c gc.c bignums.c debug.c primitives.c dispatch.c picobit-vm.h
 	picc18 -DHI_TECH_C -DLESS_MACROS --chip=18F4550 picobit-vm.c
+
+arduino: picobit-vm.c gc.c bignums.c debug.c primitives.c dispatch.c picobit-vm.h
+	make -f Makefile.arduino
 
 clean:
 	rm -f *.o *~ picobit-vm

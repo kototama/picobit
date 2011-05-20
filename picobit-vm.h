@@ -35,76 +35,8 @@ typedef uint16 obj;
 
 /*---------------------------------------------------------------------------*/
 
-// environment
-
-#ifdef PICOBOARD2
-#define ROBOT
-#endif
-
-#ifdef HI_TECH_C
-#define ROBOT
-#endif
-
-#ifdef MCC18
-#define ROBOT
-#endif
-
-#ifdef SIXPIC
-#define ROBOT
-#endif
-
-#ifndef ROBOT
-#define WORKSTATION
-#endif
-
-
-#ifdef HI_TECH_C
-
-#include <pic18.h>
-
-static volatile near uint8 FW_VALUE_UP       @ 0x33;
-static volatile near uint8 FW_VALUE_HI       @ 0x33;
-static volatile near uint8 FW_VALUE_LO       @ 0x33;
-
-#define ACTIVITY_LED1_LAT LATB
-#define ACTIVITY_LED1_BIT 5
-#define ACTIVITY_LED2_LAT LATB
-#define ACTIVITY_LED2_BIT 4
-static volatile near bit ACTIVITY_LED1 @ ((unsigned)&ACTIVITY_LED1_LAT*8)+ACTIVITY_LED1_BIT;
-static volatile near bit ACTIVITY_LED2 @ ((unsigned)&ACTIVITY_LED2_LAT*8)+ACTIVITY_LED2_BIT;
-
-#endif
-
-
-#ifdef WORKSTATION
-
-#include <stdio.h>
-#include <stdlib.h>
-
-#ifdef NETWORKING
-#include <pcap.h>
-#define MAX_PACKET_SIZE BUFSIZ
-#define PROMISC 1
-#define TO_MSEC 1
-char errbuf[PCAP_ERRBUF_SIZE];
-pcap_t *handle;
-#define INTERFACE "eth0"
-char buf [MAX_PACKET_SIZE]; // buffer for writing
-#endif
-
-#ifdef _WIN32
-
-#include <sys/types.h>
-#include <sys/timeb.h>
-#include <conio.h>
-
-#else
-
-#include <sys/time.h>
-
-#endif
-
-#endif
+#include "arch/ram.h"
+#include "arch/arch.h"
 
 /*---------------------------------------------------------------------------*/
 
@@ -114,8 +46,6 @@ char buf [MAX_PACKET_SIZE]; // buffer for writing
 // TODO these 2 are only used in negp, use them elsewhere ?
 #define true  1
 #define false 0
-
-#define CODE_START 0x8000
 
 /*---------------------------------------------------------------------------*/
 
@@ -127,130 +57,6 @@ char buf [MAX_PACKET_SIZE]; // buffer for writing
 #else
 #define IF_TRACE(x)
 #define IF_GC_TRACE(x)
-#endif
-
-/*---------------------------------------------------------------------------*/
-
-// error handling
-
-#ifdef HI_TECH_C
-void halt_with_error () {while(1);}
-#endif
-
-#ifdef WORKSTATION
-#define ERROR(prim, msg) error (prim, msg)
-#define TYPE_ERROR(prim, type) type_error (prim, type)
-void error (char *prim, char *msg);
-void type_error (char *prim, char *type);
-#else
-#define ERROR(prim, msg) halt_with_error()
-#define TYPE_ERROR(prim, type) halt_with_error()
-#endif
-
-/*---------------------------------------------------------------------------*/
-
-// address space layout
-// TODO document each zone, also explain that since vector space is in ram, it uses the ram primitives
-
-#define MAX_VEC_ENCODING 2047
-#define MIN_VEC_ENCODING 1280
-#define VEC_BYTES ((MAX_VEC_ENCODING - MIN_VEC_ENCODING + 1)*4)
-// if the pic has less than 8k of memory, start vector space lower
-
-#define MAX_RAM_ENCODING 1279
-#define MIN_RAM_ENCODING 512
-#define RAM_BYTES ((MAX_RAM_ENCODING - MIN_RAM_ENCODING + 1)*4)
-
-#define MIN_FIXNUM_ENCODING 3
-#define MIN_FIXNUM -1
-#define MAX_FIXNUM 255
-#define MIN_ROM_ENCODING (MIN_FIXNUM_ENCODING + MAX_FIXNUM - MIN_FIXNUM + 1)
-
-#ifdef LESS_MACROS
-uint16 OBJ_TO_RAM_ADDR(uint16 o, uint8 f) {return ((((o) - MIN_RAM_ENCODING) << 2) + (f));}
-uint16 OBJ_TO_ROM_ADDR(uint16 o, uint8 f) {return ((((o) - MIN_ROM_ENCODING) << 2) + (CODE_START + 4 + (f)));}
-#else
-#define OBJ_TO_RAM_ADDR(o,f) ((((o) - MIN_RAM_ENCODING) << 2) + (f))
-#define OBJ_TO_ROM_ADDR(o,f) ((((o) - MIN_ROM_ENCODING) << 2) + (CODE_START + 4 + (f)))
-#endif
-
-#ifdef SIXPIC
-#ifdef LESS_MACROS
-uint8 ram_get(uint16 a) { return *(a+0x200); }
-void  ram_set(uint16 a, uint8 x) { *(a+0x200) = (x); }
-#else
-#define ram_get(a) *(a+0x200)
-#define ram_set(a,x) *(a+0x200) = (x)
-#endif
-#endif
-
-#ifdef MCC18
-#ifdef LESS_MACROS
-uint8 ram_get(uint16 a) {return *(uint8*)(a+0x200);}
-void  ram_set(uint16 a, uint8 x) {*(uint8*)(a+0x200) = (x);}
-#else
-#define ram_get(a) *(uint8*)(a+0x200)
-#define ram_set(a,x) *(uint8*)(a+0x200) = (x)
-#endif
-#endif
-
-#ifdef HI_TECH_C
-// cannot be a macro
-uint8 ram_get(uint16 a) {
-  uint8 *p = a+0x200;
-  return *p;
-}
-void ram_set(uint16 a, uint8 x) {
-  uint8 *p = a+0x200;
-  *p = x;
-}
-#endif
-
-#ifdef WORKSTATION
-uint8 ram_mem[RAM_BYTES + VEC_BYTES];
-#define ram_get(a) ram_mem[a]
-#define ram_set(a,x) ram_mem[a] = (x)
-#endif
-
-#ifdef MCC18
-uint8 rom_get (rom_addr a){
-  return *(rom uint8*)a;
-}
-#endif
-#ifdef HI_TECH_C
-uint8 rom_get (rom_addr a){
-  return flash_read(a);
-}
-#endif
-
-#ifdef WORKSTATION
-#define ROM_BYTES 8192
-uint8 rom_mem[ROM_BYTES] =
-  {
-#define RED_GREEN
-#define PUTCHAR_LIGHT_not
-#ifdef RED_GREEN
-    0xFB, 0xD7, 0x03, 0x00, 0x00, 0x00, 0x00, 0x32
-    , 0x03, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
-    , 0x08, 0x50, 0x80, 0x16, 0xFE, 0xE8, 0x00, 0xFC
-    , 0x32, 0x80, 0x2D, 0xFE, 0xFC, 0x31, 0x80, 0x43
-    , 0xFE, 0xFC, 0x33, 0x80, 0x2D, 0xFE, 0xFC, 0x31
-    , 0x80, 0x43, 0xFE, 0x90, 0x16, 0x01, 0x20, 0xFC
-    , 0x32, 0xE3, 0xB0, 0x37, 0x09, 0xF3, 0xFF, 0x20
-    , 0xFC, 0x33, 0xE3, 0xB0, 0x40, 0x0A, 0xF3, 0xFF
-    , 0x08, 0xF3, 0xFF, 0x01, 0x40, 0x21, 0xD1, 0x00
-    , 0x02, 0xC0, 0x4C, 0x71, 0x01, 0x20, 0x50, 0x90
-    , 0x51, 0x00, 0xF1, 0x40, 0xD8, 0xB0, 0x59, 0x90
-    , 0x51, 0x00, 0xFF
-#endif
-#ifdef PUTCHAR_LIGHT
-    0xFB, 0xD7, 0x00, 0x00, 0x80, 0x08, 0xFE, 0xE8
-    , 0x00, 0xF6, 0xF5, 0x90, 0x08
-#endif
-  };
-uint8 rom_get (rom_addr a) {
-  return rom_mem[a-CODE_START];
-}
 #endif
 
 #ifdef LESS_MACROS
@@ -602,10 +408,6 @@ uint16 a3;
 
 // primitives
 
-#ifdef WORKSTATION
-char *prim_name[64];
-#endif
-
 void prim_numberp ();
 void prim_add ();
 void prim_mul_non_neg ();
@@ -640,10 +442,6 @@ void prim_string2list ();
 void prim_list2string ();
 void prim_booleanp ();
 
-#ifdef WORKSTATION
-void show (obj o);
-void print (obj o);
-#endif
 void prim_print ();
 uint32 read_clock ();
 void prim_clock ();
@@ -699,17 +497,6 @@ uint8 handle_arity_and_rest_param (uint8 na);
 uint8 build_env (uint8 na);
 void save_cont ();
 void interpreter ();
-
-/*---------------------------------------------------------------------------*/
-
-// debugging functions
-
-#ifdef WORKSTATION
-void show_type (obj o);
-void show_state (rom_addr pc);
-#endif
-
-/*---------------------------------------------------------------------------*/
 
 #endif
 
