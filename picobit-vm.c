@@ -368,8 +368,15 @@ int main (int argc, char *argv[])
 interpreter();
 #endif
 
-#if defined(HI_TECH_C) || defined (ARDUINO) 
+#ifdef HI_TECH_C
 void main () {
   interpreter();
+}
+#endif
+
+#ifdef ARDUINO
+int main() {
+    interpreter();
+    return 0; /* make gcc happy */
 }
 #endif

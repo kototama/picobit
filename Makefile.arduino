@@ -34,14 +34,14 @@
 #  7. Type "make upload", reset your Arduino board, and press enter to
 #     upload your program to the Arduino board.
 
-TARGET = picobit-vm #$(notdir $(CURDIR))
+TARGET =picobit-vm
 INSTALL_DIR = /opt/arduino-0022
 PORT = /dev/ttyACM0
 UPLOAD_RATE = 115200
 AVRDUDE_PROGRAMMER = stk500v1
 MCU = atmega328p
 F_CPU = 16000000
-USER_SRC=picobit-vm.c gc.c bignums.c debug.c primitives.c dispatch.c
+USER_SRC=picobit-vm.c
 
 ############################################################################
 # Below here nothing should be changed...
@@ -70,8 +70,8 @@ DEBUG = stabs
 OPT = s
 
 # Place -D or -U options here
-CDEFS = -DF_CPU=$(F_CPU)
-CXXDEFS = -DF_CPU=$(F_CPU)
+CDEFS = -DF_CPU=$(F_CPU) -DARDUINO
+CXXDEFS = -DF_CPU=$(F_CPU) -DARDUINO
 
 # Place -I options here
 CINCS = -I$(ARDUINO) -Iarch
@@ -88,7 +88,7 @@ CWARN = -Wall #-Wstrict-prototypes
 CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 #CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
 
-CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CSTANDARD) $(CEXTRA) -DARDUINO
+CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CSTANDARD) $(CEXTRA)
 CXXFLAGS = $(CDEFS) $(CINCS) -O$(OPT)
 #ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs
 LDFLAGS = -lm
