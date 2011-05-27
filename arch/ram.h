@@ -5,7 +5,8 @@
 // address space layout
 // TODO document each zone, also explain that since vector space is in ram, it uses the ram primitives
 
-#define CODE_START 0x8000
+//#define CODE_START 0x8000
+#define CODE_START 0x4000
 
 #define MAX_VEC_ENCODING 2047
 #define MIN_VEC_ENCODING 1280

@@ -15,7 +15,7 @@
 (define min-vec-encoding 1280)
 (define max-vec-encoding 2047)
 
-(define code-start #x8000)
+(define code-start #x4000)
 
 (define (predef-constants) (list))
 
