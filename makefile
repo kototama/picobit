@@ -41,5 +41,11 @@ hi_tech_c: picobit-vm.c gc.c bignums.c debug.c primitives.c dispatch.c picobit-v
 arduino: picobit-vm.c gc.c bignums.c debug.c primitives.c dispatch.c picobit-vm.h
 	make -f Makefile.arduino
 
+arduino_upload:
+	make -f Makefile.arduino upload
+
+arduino_mergehex:
+	make -f Makefile.arduino mergehex
+
 clean:
 	rm -f *.o *~ picobit-vm

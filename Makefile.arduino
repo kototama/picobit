@@ -96,7 +96,7 @@ LDFLAGS = -lm
 
 # Programming support using avrdude. Settings and variables.
 AVRDUDE_PORT = $(PORT)
-AVRDUDE_WRITE_FLASH = -U flash:w:applet/$(TARGET).hex
+AVRDUDE_WRITE_FLASH = -U flash:w:applet/all.hex
 AVRDUDE_FLAGS = -V -F -C $(AVRDUDE_PATH)/avrdude.conf \
 -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER) \
 -b $(UPLOAD_RATE)
@@ -149,9 +149,19 @@ lss: applet/$(TARGET).lss
 sym: applet/$(TARGET).sym
 
 # Program the device.
-upload: applet/$(TARGET).hex
+upload: mergehex
 	pulsedtr.py $(PORT)
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
+
+# Merge the two hexs:
+mergehex:
+	@if [ -n "$(PROG_HEX)" ] && [ -f $(PROG_HEX) ]; then \
+		echo "Merging applet/$(TARGET).hex and $(PROG_HEX) into applet/all.hex"; \
+		rm -f applet/all.hex && hexmerge.py applet/$(TARGET).hex $(PROG_HEX) -o applet/all.hex && \
+		echo "Merge successfull"; \
+        else \
+		echo "Please specify the HEX file to merge with the PROG_HEX environment variable."; exit 1; \
+	fi
 
 
 # Display size of file.
@@ -242,4 +252,5 @@ depend:
 		>> $(MAKEFILE); \
 	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) >> $(MAKEFILE)
 
-.PHONY:	all build elf hex eep lss sym program coff extcoff clean depend sizebefore sizeafter
+.PHONY:	all build elf hex eep lss sym program coff extcoff clean depend sizebefore sizeafter mergehex
+
