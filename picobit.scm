@@ -3,6 +3,8 @@
 ;;;; Copyright (C) 2004-2009 by Marc Feeley and Vincent St-Amour
 ;;;; All Rights Reserved.
 
+(include "arch.scm")
+
 (define-macro (dummy)
   (proper-tail-calls-set! #f)
   #f)
@@ -43,8 +45,11 @@
 
 (define parse-file
   (lambda (filename)
-    (let* ((library
-            (with-input-from-file "library.scm" read-all))
+    (let* ((libname (if (equal? arch 'arduino)
+                         "library-arduino.scm"
+                         "library.scm"))
+           (library
+            (with-input-from-file libname read-all))
            (toplevel-exprs
             (expand-includes
 	     (append library
@@ -53,7 +58,6 @@
             (make-global-env))
            (parsed-prog
             (parse-top (cons 'begin toplevel-exprs) global-env)))
-
       (for-each
        (lambda (node)
          (mark-needed-global-vars! global-env node))
