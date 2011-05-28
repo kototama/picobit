@@ -13,8 +13,8 @@
 #define VEC_BYTES ((MAX_VEC_ENCODING - MIN_VEC_ENCODING + 1)*4)
 // if the pic has less than 8k of memory, start vector space lower
 
-#define MAX_RAM_ENCODING 1279
-#define MIN_RAM_ENCODING 512
+#define MAX_RAM_ENCODING 1279 //1279
+#define MIN_RAM_ENCODING 880 // 512
 #define RAM_BYTES ((MAX_RAM_ENCODING - MIN_RAM_ENCODING + 1)*4)
 
 #define MIN_FIXNUM_ENCODING 3
