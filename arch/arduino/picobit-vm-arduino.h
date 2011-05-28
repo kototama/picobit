@@ -1,17 +1,21 @@
 #ifndef PICOBIT_ARDUINO_VM_H
 #define PICOBIT_ARDUINO_VM_H
 
+#include <avr/io.h>
+#include <avr/pgmspace.h>
+
 #include "ram.h"
 
 #define ram_get(a) *(uint8*)(a+0x200)
 #define ram_set(a,x) *(uint8*)(a+0x200) = (x)
 
-/* TODO, implement this. Yet this would probably read the RAM addresses */
 uint8 rom_get (rom_addr a){ 
-    return *(/* rom */ uint8*)a;
+    return pgm_read_byte(a);
 }
 
 void halt_with_error () {while(1);}
+
+extern "C" void __cxa_pure_virtual(void) {};
 
 // primitives
 
