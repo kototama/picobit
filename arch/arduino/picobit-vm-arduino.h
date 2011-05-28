@@ -15,8 +15,6 @@ uint8 rom_get (rom_addr a){
 
 void halt_with_error () {while(1);}
 
-extern "C" void __cxa_pure_virtual(void) {};
-
 // primitives
 
 void prim_numberp ();
