@@ -627,7 +627,7 @@ void interpreter () {
       arg2 = pop();  arg1 = pop();  prim_pin_mode ();  break;
     case 3:
       /* prim #%digital-write */
-      arg3 = pop();  arg2 = pop();  arg1 = pop();  prim_digital_write ();  ;break;
+      arg2 = pop();  arg1 = pop();  prim_digital_write ();  break;
     case 4:
       /* prim #%led2-color */
       arg1 = pop();  prim_led2_color ();  break;
