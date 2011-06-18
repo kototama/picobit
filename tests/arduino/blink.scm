@@ -5,7 +5,8 @@
 (define (loop)
   (digital-write PIN_LED HIGH)
   (sleep 1000)
-  (digital-write PIN_LED HIGH)
+  (digital-write PIN_LED LOW)
+  (sleep 1000)
   (loop))
 
 (loop)
