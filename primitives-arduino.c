@@ -4,7 +4,7 @@
  * Copyright 2004-2009 by Marc Feeley and Vincent St-Amour, All Rights Reserved.
  */
 
-#include "arch/arduino/WProgram.h"
+#include "WProgram.h"
 #include "picobit-vm.h"
 
 #include <stdint.h>

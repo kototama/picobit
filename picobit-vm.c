@@ -44,7 +44,7 @@ void halt_with_error () {
 
 // memory access
 
-word ram_get_fieldn (obj o, word n) {
+word_t ram_get_fieldn (obj o, word_t n) {
   switch (n) {
   case 0: return ram_get_field0 (o);
   case 1: return ram_get_field1 (o);
@@ -52,7 +52,7 @@ word ram_get_fieldn (obj o, word n) {
   case 3: return ram_get_field3 (o);
   }
 }
-void ram_set_fieldn (obj o, uint8 n, word val) { // TODO have as a macro ?
+void ram_set_fieldn (obj o, uint8 n, word_t val) { // TODO have as a macro ?
   switch (n) {
   case 0: ram_set_field0 (o, val); break;
   case 1: ram_set_field1 (o, val); break;

@@ -25,7 +25,7 @@ typedef unsigned short uint16;
 typedef unsigned long uint32;
 #endif
 
-typedef uint8 word;
+typedef uint8 word_t;
 
 typedef uint16 ram_addr;
 typedef uint16 rom_addr;
@@ -110,24 +110,24 @@ uint8 ROM_GET_FIELD3_MACRO(uint16 o) {return rom_get (OBJ_TO_ROM_ADDR(o,3));}
 #define ROM_GET_FIELD3_MACRO(o) rom_get (OBJ_TO_ROM_ADDR(o,3))
 #endif
 
-word ram_get_gc_tags (obj o) { return RAM_GET_GC_TAGS_MACRO(o); }
-word ram_get_gc_tag0 (obj o) { return RAM_GET_GC_TAG0_MACRO(o); }
-word ram_get_gc_tag1 (obj o) { return RAM_GET_GC_TAG1_MACRO(o); }
-void ram_set_gc_tags (obj o, word tags) { RAM_SET_GC_TAGS_MACRO(o, tags); }
-void ram_set_gc_tag0 (obj o, word tag) { RAM_SET_GC_TAG0_MACRO(o,tag); }
-void ram_set_gc_tag1 (obj o, word tag) { RAM_SET_GC_TAG1_MACRO(o,tag); }
-word ram_get_field0 (obj o) { return RAM_GET_FIELD0_MACRO(o); }
-word ram_get_field1 (obj o) { return RAM_GET_FIELD1_MACRO(o); }
-word ram_get_field2 (obj o) { return RAM_GET_FIELD2_MACRO(o); }
-word ram_get_field3 (obj o) { return RAM_GET_FIELD3_MACRO(o); }
-void ram_set_field0 (obj o, word val) { RAM_SET_FIELD0_MACRO(o,val); }
-void ram_set_field1 (obj o, word val) { RAM_SET_FIELD1_MACRO(o,val); }
-void ram_set_field2 (obj o, word val) { RAM_SET_FIELD2_MACRO(o,val); }
-void ram_set_field3 (obj o, word val) { RAM_SET_FIELD3_MACRO(o,val); }
-word rom_get_field0 (obj o) { return ROM_GET_FIELD0_MACRO(o); }
-word rom_get_field1 (obj o) { return ROM_GET_FIELD1_MACRO(o); }
-word rom_get_field2 (obj o) { return ROM_GET_FIELD2_MACRO(o); }
-word rom_get_field3 (obj o) { return ROM_GET_FIELD3_MACRO(o); }
+word_t ram_get_gc_tags (obj o) { return RAM_GET_GC_TAGS_MACRO(o); }
+word_t ram_get_gc_tag0 (obj o) { return RAM_GET_GC_TAG0_MACRO(o); }
+word_t ram_get_gc_tag1 (obj o) { return RAM_GET_GC_TAG1_MACRO(o); }
+void ram_set_gc_tags (obj o, word_t tags) { RAM_SET_GC_TAGS_MACRO(o, tags); }
+void ram_set_gc_tag0 (obj o, word_t tag) { RAM_SET_GC_TAG0_MACRO(o,tag); }
+void ram_set_gc_tag1 (obj o, word_t tag) { RAM_SET_GC_TAG1_MACRO(o,tag); }
+word_t ram_get_field0 (obj o) { return RAM_GET_FIELD0_MACRO(o); }
+word_t ram_get_field1 (obj o) { return RAM_GET_FIELD1_MACRO(o); }
+word_t ram_get_field2 (obj o) { return RAM_GET_FIELD2_MACRO(o); }
+word_t ram_get_field3 (obj o) { return RAM_GET_FIELD3_MACRO(o); }
+void ram_set_field0 (obj o, word_t val) { RAM_SET_FIELD0_MACRO(o,val); }
+void ram_set_field1 (obj o, word_t val) { RAM_SET_FIELD1_MACRO(o,val); }
+void ram_set_field2 (obj o, word_t val) { RAM_SET_FIELD2_MACRO(o,val); }
+void ram_set_field3 (obj o, word_t val) { RAM_SET_FIELD3_MACRO(o,val); }
+word_t rom_get_field0 (obj o) { return ROM_GET_FIELD0_MACRO(o); }
+word_t rom_get_field1 (obj o) { return ROM_GET_FIELD1_MACRO(o); }
+word_t rom_get_field2 (obj o) { return ROM_GET_FIELD2_MACRO(o); }
+word_t rom_get_field3 (obj o) { return ROM_GET_FIELD3_MACRO(o); }
 
 obj ram_get_car (obj o);
 obj rom_get_car (obj o);
