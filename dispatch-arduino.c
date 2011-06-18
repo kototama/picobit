@@ -92,6 +92,8 @@ void save_cont () {
 }
 
 void interpreter () {
+  init(); /* init arduino */
+
   pc = rom_get (CODE_START+2);
   pc = (CODE_START + 4) + (pc << 2);
 
