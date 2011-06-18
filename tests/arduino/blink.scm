@@ -2,11 +2,14 @@
 
 (pin-mode PIN_LED HIGH)
 
-(define (loop)
-  (digital-write PIN_LED HIGH)
-  (sleep 1000)
-  (digital-write PIN_LED LOW)
-  (sleep 1000)
-  (loop))
+(define (main)
+  (let loop ()
+    ;; (display "digital write HIGH")
+    (digital-write PIN_LED HIGH)
+    (sleep 1000)
+    ;; (display "digital write LOW")
+    (digital-write PIN_LED LOW)
+    (sleep 1000)
+    (loop)))
 
-(loop)
+(main)
