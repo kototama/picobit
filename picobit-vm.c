@@ -286,6 +286,10 @@ int read_hex_file (char *filename)
 #include "bignums.c"
 #include "primitives.c"
 #include "dispatch.c"
+
+#ifdef ARDUINO
+#include "hserial-arduino.c"
+#endif
 /* #endif */
 
 /*---------------------------------------------------------------------------*/

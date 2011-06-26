@@ -4,7 +4,10 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 
+#include <WProgram.h> /* putting it after the serial generates an error ?! */
+
 #include "ram.h"
+#include "hserial-arduino.h"
 
 #define ram_get(a) *(uint8*)(a+0x200)
 #define ram_set(a,x) *(uint8*)(a+0x200) = (x)

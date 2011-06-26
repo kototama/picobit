@@ -624,17 +624,7 @@ void prim_putchar () {
   if (a1 > 255 || a2 < 1 || a2 > 3)
     ERROR("putchar", "argument out of range");
 
-#ifdef  PICOBOARD2
-  serial_tx_write( a2, a1 );
-#endif
-#ifdef SIXPIC
-  uart_write(a1);
-#endif
-
-#ifdef WORKSTATION
-  putchar (a1);
-  fflush (stdout);
-#endif
+  hs_writechr(0, a1);
 
   arg1 = OBJ_FALSE;
   arg2 = OBJ_FALSE;
