@@ -91,6 +91,30 @@ void save_cont () {
   arg3 = OBJ_FALSE;
 }
 
+
+void three()
+{
+  int v;
+  char stackstr[6];
+
+  sprintf(stackstr, "%d\n", (int)&v);
+  hs_writestr(0, "stack at\n");
+  hs_writestr(0, stackstr);
+}
+
+
+void two()
+{
+  three();
+}
+
+
+void print_stack()
+{
+  two();
+}
+
+
 void interpreter () {
   init(); /* init arduino */
 
@@ -98,6 +122,8 @@ void interpreter () {
   hs_init();
   hs_start(0, 9600);
 
+  /* print_stack(); */
+  
   pc = rom_get (CODE_START+2);
   pc = (CODE_START + 4) + (pc << 2);
 

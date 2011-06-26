@@ -513,33 +513,12 @@ void prim_print () {
 }
 
 uint32 read_clock () {
-  uint32 now = 0;
+  uint32 now = millis();
+  /* char timestr[12]; */
 
-#ifdef  PICOBOARD2
-  now = from_now( 0 );
-#endif
-
-#ifdef WORKSTATION
-#ifdef _WIN32
-  static int32 start = 0;
-  struct timeb tb;
-  ftime (&tb);
-  now = tb.time * 1000 + tb.millitm;
-  if (start == 0)
-    start = now;
-  now -= start;
-#else
-  static int32 start = 0;
-  struct timeval tv;
-  if (gettimeofday (&tv, NULL) == 0) {
-    now = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-    if (start == 0)
-      start = now;
-    now -= start;
-  }
-#endif
-#endif
-
+  /* sprintf(timestr, "%u\n", (unsigned int)now); */
+  /* hs_writestr(0, timestr); */
+  
   return now;
 }
 
